@@ -66,3 +66,10 @@ The React frontend will run on http://localhost:3000.
 
 🤝 Contributing
 Fork the repository, create a feature branch, and submit a pull request!
+
+Introduction section 
+
+/home/trevor/Desktop/BicycleBase/bicycle-base/public/images/bicycle-1838972_1280.jpg
+
+features section
+/home/trevor/Desktop/BicycleBase/bicycle-base/public/images/cycling-7564103_1280.jpg

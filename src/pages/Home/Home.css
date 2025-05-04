@@ -45,6 +45,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   color: #fff;
   text-align: center;
   padding: 2rem;
@@ -60,7 +61,7 @@ html, body {
 .intro-section {
   width: 100vw;
   height: 65vh;
-  background-image: url('/home/trevor/Desktop/BicycleBase/bicycle-base/public/images/bicycle-1838972_1280.jpg');
+  background-image: url('/images/bicycle-1838972_1280.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -88,7 +89,7 @@ html, body {
 .features-section {
   width: 100vw;
   min-height: 50vh;
-  background-image: url('/home/trevor/Desktop/BicycleBase/bicycle-base/public/images/cycling-7564103_1280.jpg');
+  background-image: url('/images/cycling-7564103_1280.jpg');
   background-size: cover;
   background-position: center;
   padding: 4rem 2rem;
@@ -221,6 +222,33 @@ html, body {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+.scroll-down {
+  margin-top: 2rem;
+  text-align: center;
+  animation: fadeIn 2s ease-in-out 1.5s forwards;
+  opacity: 0;
+}
+
+.scroll-down span {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.scroll-down .arrow {
+  font-size: 2rem;
+  color: #ffd700;
+  animation: bounce 2s infinite;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
 }
 
 

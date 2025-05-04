@@ -23,6 +23,10 @@ const Home = () => {
         </video>
         <div className="hero-overlay">
           <h1>Welcome to BicycleBase 🚴‍♂️</h1>
+          <div className="scroll-down">
+            <span>Scroll to explore</span>
+            <div className="arrow">&#8595;</div>
+          </div>
         </div>
       </section>
 

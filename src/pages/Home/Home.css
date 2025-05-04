@@ -61,7 +61,7 @@ html, body {
 .intro-section {
   width: 100vw;
   height: 65vh;
-  background-image: url('/images/bicycle-1838972_1280.jpg');
+  background-image: url('/public/images/bicycle-1838972_1280.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -89,7 +89,7 @@ html, body {
 .features-section {
   width: 100vw;
   min-height: 50vh;
-  background-image: url('/images/cycling-7564103_1280.jpg');
+  background-image: url('/public/images/cycling-7564103_1280.jpg');
   background-size: cover;
   background-position: center;
   padding: 4rem 2rem;

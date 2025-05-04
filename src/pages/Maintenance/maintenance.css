@@ -1,0 +1,99 @@
+.maintenance-page {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .maintenance-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+  
+  .maintenance-form select,
+  .maintenance-form input,
+  .maintenance-form textarea {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .maintenance-form button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .maintenance-form button:hover {
+    background-color: #45a049;
+  }
+  
+  .maintenance-logs h2 {
+    margin-bottom: 1rem;
+  }
+  
+  .maintenance-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .progress-bar-container {
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 20px;
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    transition: width 0.3s ease-in-out, background-color 0.3s ease;
+  }
+  
+  .progress-bar-fill.complete {
+    background-color: #00c853; /* green accent when complete */
+    font-weight: bold;
+  }
+  
+  .progress-label {
+    position: relative;
+    z-index: 2;
+  }
+  
+  
+  .progress-label {
+    font-size: 0.9rem;
+  }
+
+  .progress-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0.5rem;
+  }
+  
+  .progress-buttons button {
+    padding: 5px 10px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,102 @@
+.bicycle-page {
+  background-image: url('/home/trevor/Desktop/BicycleBase/bicycle-base/public/images/cycle-1507005_1280.jpg'); /* Replace with your actual image */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.bicycle-overlay {
+  background-color: rgba(255, 255, 255, 0.85); /* Light transparent overlay */
+  border-radius: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  z-index: 2;
+}
+
+
+.bicycle-list {
+    padding: 0;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  .bicycle-list h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .bicycle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    justify-items: center; /* Keeps cards centered in their columns */
+  }
+  
+  .bicycle-card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 370px; /* Increased to allow room for buttons */
+  }
+  
+  .bicycle-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .bicycle-card .bicycle-image {
+    width: 150px;         /* Fixed width */
+    height: 150px;        /* Fixed height */
+    object-fit: cover;    /* Keep the image nicely cropped */
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;   /* Center the image inside the card */
+  }
+  
+  .bicycle-card h3 {
+    margin: 0.5rem 0;
+    color: #444;
+  }
+  
+  .bicycle-card p {
+    color: #777;
+    margin: 0.25rem 0;
+  }
+
+  .bicycle-card-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .bicycle-card-buttons button {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #2e86de;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .bicycle-card-buttons button:hover {
+    background-color: #1b4f72;
+  }
+  
+  

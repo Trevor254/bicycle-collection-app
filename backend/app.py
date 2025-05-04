@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, session
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
@@ -13,6 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bicycles.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.secret_key = os.environ.get("SECRET_KEY", "dev")
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -111,6 +112,31 @@ def create_user():
     db.session.add(user)
     db.session.commit()
     return jsonify(user.to_dict()), 201
+
+@app.route("/auth/signup", methods=["POST"])
+def signup():
+    data = request.json
+    if User.query.filter_by(email=data["email"]).first():
+        return {"error": "Email already registered"}, 400
+    user = User(name=data["name"], email=data["email"])
+    user.set_password(data["password"])
+    db.session.add(user)
+    db.session.commit()
+    return {"message": "User registered successfully"}, 201
+
+@app.route("/auth/login", methods=["POST"])
+def login():
+    data = request.json
+    user = User.query.filter_by(email=data["email"]).first()
+    if user and user.check_password(data["password"]):
+        session["user_id"] = user.id
+        return {"message": "Login successful", "user": user.to_dict()}, 200
+    return {"error": "Invalid credentials"}, 401
+
+@app.route("/auth/logout", methods=["POST"])
+def logout():
+    session.pop("user_id", None)
+    return {"message": "Logged out"}, 200
 
 # ---------------- RIDE ROUTES ---------------- #
 @app.route("/rides", methods=["GET"])

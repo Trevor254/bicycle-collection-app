@@ -44,7 +44,7 @@ function App() {
         <Route path="/bicycles" element={<Bicycles bicycles={bicycles} setBicycles={setBicycles} />} />
         <Route path="/add-bicycle" element={<AddBicycle onAdd={handleAddBicycle} />} />
         <Route path="/maintenance" element={<Maintenance bicycles={bicycles} maintenanceLogs={maintenanceLogs} onAddMaintenance={handleAddMaintenance} />} />
-        <Route path="/rides" element={<Rides bicycles={bicycles} users={users} />} />
+        <Route path="/rides" element={<Rides bicycles={bicycles} users={users} />} /> 
         <Route path="/users" element={<Users onAddUser={handleAddUser} />} />
       </Routes>
     </div>

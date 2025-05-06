@@ -1,157 +1,144 @@
-// src/pages/Users/Users.js
+// src/pages/Users.js
 import React, { useState, useEffect } from 'react';
 import './Users.css';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE = 'http://localhost:5000';
 
 const Users = ({ onAddUser }) => {
   const [users, setUsers] = useState([]);
-  const [formData, setFormData] = useState({ name: '', email: '' });
-  const [loginEmail, setLoginEmail] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [login, setLogin] = useState({ email: '', password: '' });
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
-
-  // Fetch all users (for display)
-  const fetchUsers = () => {
-    fetch(`${API_BASE_URL}/users`)
-      .then(res => res.json())
-      .then(setUsers)
-      .catch(error => console.error('Error fetching users:', error));
-  };
-
-  // Check if session exists
-  const checkSession = () => {
-    fetch(`${API_BASE_URL}/check_session`, {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => {
-        if (res.ok) return res.json();
-        throw new Error('No session');
-      })
-      .then(user => setLoggedInUser(user))
-      .catch(() => setLoggedInUser(null));
-  };
 
   useEffect(() => {
     fetchUsers();
     checkSession();
   }, []);
 
-  // Handle new user creation
-  const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  const fetchUsers = () => {
+    fetch(`${API_BASE}/users`)
+      .then(res => res.json())
+      .then(setUsers);
   };
 
-  const handleSubmit = (e) => {
+  const checkSession = () => {
+    fetch(`${API_BASE}/check_session`, { credentials: 'include' })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setLoggedInUser(data))
+      .catch(() => setLoggedInUser(null));
+  };
+
+  const handleSignup = (e) => {
     e.preventDefault();
-    fetch(`${API_BASE_URL}/users`, {
+    fetch(`${API_BASE}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(form)
     })
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to add user');
-        return res.json();
-      })
-      .then(newUser => {
-        setFormData({ name: '', email: '' });
-        setSuccessMessage('✅ User added successfully!');
+      .then(res => res.json())
+      .then((newUser) => {
+        setForm({ name: '', email: '', password: '' });
         fetchUsers();
-        onAddUser(newUser);
-        setTimeout(() => setSuccessMessage(''), 3000);
-      })
-      .catch(error => console.error('Error adding user:', error));
-  };
-
-  // Handle login
-  const handleLogin = () => {
-    fetch(`${API_BASE_URL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ email: loginEmail })
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Login failed');
-        return res.json();
-      })
-      .then(data => {
-        setLoggedInUser(data.user);
-        setLoginEmail('');
-      })
-      .catch(err => alert('❌ Login failed. Check email.'));
-  };
-
-  // Handle logout
-  const handleLogout = () => {
-    fetch(`${API_BASE_URL}/logout`, {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then(() => {
-        setLoggedInUser(null);
+        if (onAddUser) onAddUser(newUser);
       });
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(login)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setLoggedInUser(data.user);
+          setLogin({ email: '', password: '' });
+        }
+      });
+  };
+
+  const handleLogout = () => {
+    fetch(`${API_BASE}/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    }).then(() => setLoggedInUser(null));
   };
 
   return (
     <div className="users-container">
-      <h2>👤 User Management</h2>
+      <h2>User Management</h2>
 
-      {loggedInUser ? (
-        <div className="logged-in-info">
-          <p>✅ Logged in as <strong>{loggedInUser.name}</strong> ({loggedInUser.email})</p>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <div className="login-form">
-          <h4>🔐 Login</h4>
+      <div className="user-section">
+        {loggedInUser ? (
+          <div className="logged-in-box">
+            <p>✅ Logged in as <strong>{loggedInUser.name}</strong> ({loggedInUser.email})</p>
+            <button onClick={handleLogout}>Logout</button>
+          </div>
+        ) : (
+          <>
+            <h3>🔐 Login</h3>
+            <form className="user-form" onSubmit={handleLogin}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={login.email}
+                onChange={e => setLogin({ ...login, email: e.target.value })}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={login.password}
+                onChange={e => setLogin({ ...login, password: e.target.value })}
+                required
+              />
+              <button type="submit">Login</button>
+            </form>
+          </>
+        )}
+      </div>
+
+      <div className="user-section">
+        <h3>Create New User</h3>
+        <form className="user-form" onSubmit={handleSignup}>
+          <input
+            type="text"
+            placeholder="Name"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value })}
+            required
+          />
           <input
             type="email"
-            placeholder="Enter your email"
-            value={loginEmail}
-            onChange={e => setLoginEmail(e.target.value)}
+            placeholder="Email"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            required
           />
-          <button onClick={handleLogin}>Login</button>
-        </div>
-      )}
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={e => setForm({ ...form, password: e.target.value })}
+            required
+          />
+          <button type="submit">Create User</button>
+        </form>
+      </div>
 
-      <h3>➕ Create New User</h3>
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      <form onSubmit={handleSubmit} className="user-form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email (optional)"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <button type="submit">Create User</button>
-      </form>
-
-      <h3>📋 Registered Users</h3>
-      <ul className="user-list">
-        {users.length === 0 ? (
-          <p>No users yet.</p>
-        ) : (
-          users.map(user => (
-            <li key={user.id}>
-              <strong>{user.name}</strong> {user.email && <>({user.email})</>}
+      <div className="user-section">
+        <h3>All Users</h3>
+        <ul className="user-list">
+          {users.map(u => (
+            <li key={u.id}>
+              {u.name} {u.email && <span>({u.email})</span>}
             </li>
-          ))
-        )}
-      </ul>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

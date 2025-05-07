@@ -9,22 +9,28 @@ const Users = ({ onAddUser, setLoggedInUser }) => {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [login, setLogin] = useState({ email: '', password: '' });
   const [sessionUser, setSessionUser] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetchUsers();
-  
-    fetch(`${API_BASE}/check_session`, { credentials: 'include' })
-      .then(res => res.ok ? res.json() : null)
+
+    fetch(`${API_BASE}/check_session`, {
+      credentials: 'include',
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Not logged in');
+        return res.json();
+      })
       .then(data => {
         setSessionUser(data);
-        if (data) setLoggedInUser(data);
+        setLoggedInUser(data);
       })
       .catch(() => {
         setSessionUser(null);
         setLoggedInUser(null);
+        setShowPopup(true);
       });
-  }, [setLoggedInUser]); // ✅ include it here
-  
+  }, [setLoggedInUser]);
 
   const fetchUsers = () => {
     fetch(`${API_BASE}/users`)
@@ -67,6 +73,7 @@ const Users = ({ onAddUser, setLoggedInUser }) => {
           setSessionUser(data.user);
           setLoggedInUser(data.user);
           setLogin({ email: '', password: '' });
+          setShowPopup(false); // Close popup on successful login
         } else {
           alert(data.error || 'Login failed');
         }
@@ -85,6 +92,16 @@ const Users = ({ onAddUser, setLoggedInUser }) => {
 
   return (
     <div className="users-container">
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-message">
+            <h3>🚨 Please Sign Up or Log In</h3>
+            <p>To access your bicycles, maintenance logs, and rides, you need to sign in first.</p>
+            <button onClick={() => setShowPopup(false)}>Close</button>
+          </div>
+        </div>
+      )}
+
       <h2>User Management</h2>
 
       <div className="user-section">

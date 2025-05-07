@@ -14,7 +14,7 @@ function Bicycles({ bicycles, setBicycles }) {
   const [editForm, setEditForm] = useState({ name: '', brand: '', color: '', imageUrl: '' });
 
   const handleDelete = (id) => {
-    fetch(`http://localhost:5000/bicycles/${id}`, {
+    fetch(`https://bicycle-backend.onrender.com/bicycles/${id}`, {
       method: 'DELETE',
     })
       .then((res) => {

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Addbicycle.css';
 
-function AddBicycle({ onAdd }) {
+function AddBicycle({ onAdd, loggedInUser }) {
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
@@ -24,7 +24,8 @@ function AddBicycle({ onAdd }) {
       name: formData.name,
       brand: formData.brand,
       color: formData.color,
-      image_url: formData.imageUrl, // <-- change key to match Bicycles.js
+      image_url: formData.imageUrl,
+      user_id: loggedInUser?.id, // Include the logged-in user's ID
     };
   
     fetch('https://bicycle-backend.onrender.com/bicycles', {
@@ -51,6 +52,7 @@ function AddBicycle({ onAdd }) {
         console.error('Error:', error);
       });
   };
+  
   
 
   return (

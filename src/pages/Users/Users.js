@@ -1,31 +1,35 @@
-// src/pages/Users.js
+// src/pages/Users/Users.js
 import React, { useState, useEffect } from 'react';
 import './Users.css';
 
 const API_BASE = 'https://bicycle-backend.onrender.com';
 
-const Users = ({ onAddUser }) => {
+const Users = ({ onAddUser, setLoggedInUser }) => {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [login, setLogin] = useState({ email: '', password: '' });
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [sessionUser, setSessionUser] = useState(null);
 
   useEffect(() => {
     fetchUsers();
-    checkSession();
-  }, []);
+  
+    fetch(`${API_BASE}/check_session`, { credentials: 'include' })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        setSessionUser(data);
+        if (data) setLoggedInUser(data);
+      })
+      .catch(() => {
+        setSessionUser(null);
+        setLoggedInUser(null);
+      });
+  }, [setLoggedInUser]); // ✅ include it here
+  
 
   const fetchUsers = () => {
     fetch(`${API_BASE}/users`)
       .then(res => res.json())
       .then(setUsers);
-  };
-
-  const checkSession = () => {
-    fetch(`${API_BASE}/check_session`, { credentials: 'include' })
-      .then(res => res.ok ? res.json() : null)
-      .then(data => setLoggedInUser(data))
-      .catch(() => setLoggedInUser(null));
   };
 
   const handleSignup = (e) => {
@@ -39,9 +43,10 @@ const Users = ({ onAddUser }) => {
         if (!res.ok) throw new Error('Signup failed');
         return res.json();
       })
-      .then(() => {
+      .then(newUser => {
         setForm({ name: '', email: '', password: '' });
         fetchUsers();
+        onAddUser(newUser);
       })
       .catch(err => {
         alert(err.message);
@@ -59,6 +64,7 @@ const Users = ({ onAddUser }) => {
       .then(res => res.json())
       .then(data => {
         if (data.user) {
+          setSessionUser(data.user);
           setLoggedInUser(data.user);
           setLogin({ email: '', password: '' });
         } else {
@@ -71,7 +77,10 @@ const Users = ({ onAddUser }) => {
     fetch(`${API_BASE}/auth/logout`, {
       method: 'POST',
       credentials: 'include'
-    }).then(() => setLoggedInUser(null));
+    }).then(() => {
+      setSessionUser(null);
+      setLoggedInUser(null);
+    });
   };
 
   return (
@@ -79,9 +88,9 @@ const Users = ({ onAddUser }) => {
       <h2>User Management</h2>
 
       <div className="user-section">
-        {loggedInUser ? (
+        {sessionUser ? (
           <div className="logged-in-box">
-            <p>✅ Logged in as <strong>{loggedInUser.name}</strong> ({loggedInUser.email})</p>
+            <p>✅ Logged in as <strong>{sessionUser.name}</strong> ({sessionUser.email})</p>
             <button onClick={handleLogout}>Logout</button>
           </div>
         ) : (

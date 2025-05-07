@@ -10,6 +10,7 @@ class Bicycle(db.Model):
     brand = db.Column(db.String(100), nullable=False)
     color = db.Column(db.String(50))
     image_url = db.Column(db.String(255))
+    
 
     maintenance_logs = db.relationship('MaintenanceLog', backref='bicycle', cascade="all, delete-orphan", lazy=True)
     rides = db.relationship('Ride', backref='bicycle', cascade="all, delete-orphan", lazy=True)  # New relationship

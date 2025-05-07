@@ -7,31 +7,38 @@ function AddBicycle({ onAdd, loggedInUser }) {
     name: '',
     brand: '',
     color: '',
-    imageUrl: '',
+    imageFile: null, // changed from imageUrl to imageFile
   });
 
+  const [previewUrl, setPreviewUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData((prev) => ({ ...prev, imageFile: file }));
+    setPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const formattedData = {
-      name: formData.name,
-      brand: formData.brand,
-      color: formData.color,
-      image_url: formData.imageUrl,
-      user_id: loggedInUser?.id, // Include the logged-in user's ID
-    };
-  
+
+    const payload = new FormData();
+    payload.append('name', formData.name);
+    payload.append('brand', formData.brand);
+    payload.append('color', formData.color);
+    payload.append('user_id', loggedInUser?.id);
+    if (formData.imageFile) {
+      payload.append('image', formData.imageFile); // key must match what backend expects
+    }
+
     fetch('https://bicycle-backend.onrender.com/bicycles', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formattedData),
+      body: payload,
     })
       .then((res) => {
         if (!res.ok) throw new Error('Failed to add bicycle');
@@ -43,8 +50,9 @@ function AddBicycle({ onAdd, loggedInUser }) {
           name: '',
           brand: '',
           color: '',
-          imageUrl: '',
+          imageFile: null,
         });
+        setPreviewUrl('');
         setSuccessMessage('✅ Bicycle added successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);
       })
@@ -52,8 +60,6 @@ function AddBicycle({ onAdd, loggedInUser }) {
         console.error('Error:', error);
       });
   };
-  
-  
 
   return (
     <div className="add-bicycle-container">
@@ -84,18 +90,16 @@ function AddBicycle({ onAdd, loggedInUser }) {
           required
         />
 
-        <label>Image URL:</label>
+        <label>Upload Image:</label>
         <input
-          type="text"
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
-          placeholder="Enter image URL"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
         />
 
-        {formData.imageUrl && (
+        {previewUrl && (
           <img
-            src={formData.imageUrl}
+            src={previewUrl}
             alt="Preview"
             style={{ width: '100%', borderRadius: '8px', marginTop: '10px' }}
           />

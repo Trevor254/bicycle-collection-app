@@ -1,5 +1,17 @@
 /* src/pages/Users.css */
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-image: url('/public/images/vecteezy_collection-silhouette-of-people-use-bicycle_13482516.jpg'); /* adjust path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+  }
+  
+
 .users-container {
     max-width: 800px;
     margin: 50px auto;
@@ -8,7 +20,7 @@
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     font-family: 'Segoe UI', sans-serif;
-   
+    /* Optional user-themed background */
     background-size: cover;
     background-position: center;
     color: #333;

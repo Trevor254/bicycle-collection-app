@@ -30,22 +30,27 @@ const Users = ({ onAddUser }) => {
 
   const handleSignup = (e) => {
     e.preventDefault();
-    fetch(`${API_BASE}/users`, {
+    fetch(`${API_BASE}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     })
-      .then(res => res.json())
-      .then((newUser) => {
+      .then(res => {
+        if (!res.ok) throw new Error('Signup failed');
+        return res.json();
+      })
+      .then(() => {
         setForm({ name: '', email: '', password: '' });
         fetchUsers();
-        if (onAddUser) onAddUser(newUser);
+      })
+      .catch(err => {
+        alert(err.message);
       });
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch(`${API_BASE}/login`, {
+    fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -56,12 +61,14 @@ const Users = ({ onAddUser }) => {
         if (data.user) {
           setLoggedInUser(data.user);
           setLogin({ email: '', password: '' });
+        } else {
+          alert(data.error || 'Login failed');
         }
       });
   };
 
   const handleLogout = () => {
-    fetch(`${API_BASE}/logout`, {
+    fetch(`${API_BASE}/auth/logout`, {
       method: 'POST',
       credentials: 'include'
     }).then(() => setLoggedInUser(null));

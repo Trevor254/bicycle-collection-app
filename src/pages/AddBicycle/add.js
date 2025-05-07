@@ -27,7 +27,7 @@ function AddBicycle({ onAdd }) {
       image_url: formData.imageUrl, // <-- change key to match Bicycles.js
     };
   
-    fetch('http://localhost:5000/bicycles', {
+    fetch('https://bicycle-backend.onrender.com/bicycles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formattedData),

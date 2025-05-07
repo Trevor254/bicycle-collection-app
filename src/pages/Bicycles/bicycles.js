@@ -43,7 +43,7 @@ function Bicycles({ bicycles, setBicycles }) {
       ...editForm,
     };
 
-    fetch(`http://localhost:5000/bicycles/${updatedBike.id}`, {
+    fetch(`https://bicycle-backend.onrender.com/bicycles/${updatedBike.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedBike),

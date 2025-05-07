@@ -16,17 +16,17 @@ function App() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/bicycles")
+    fetch("https://bicycle-backend.onrender.com/bicycles")
       .then((res) => res.json())
       .then(setBicycles)
       .catch((err) => console.error("Error fetching bicycles:", err));
 
-    fetch("http://localhost:5000/maintenance")
+    fetch("https://bicycle-backend.onrender.com/maintenance")
       .then((res) => res.json())
       .then(setMaintenanceLogs)
       .catch((err) => console.error("Error fetching maintenance logs:", err));
 
-    fetch("http://localhost:5000/users")
+    fetch("https://bicycle-backend.onrender.com/users")
       .then((res) => res.json())
       .then(setUsers)
       .catch((err) => console.error("Error fetching users:", err));

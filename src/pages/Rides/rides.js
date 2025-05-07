@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Rides.css';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://bicycle-backend.onrender.com';
 
 const Rides = () => {
   const [rides, setRides] = useState([]);

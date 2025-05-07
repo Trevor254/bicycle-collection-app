@@ -7,11 +7,12 @@ function AddBicycle({ onAdd, loggedInUser }) {
     name: '',
     brand: '',
     color: '',
-    imageFile: null, // changed from imageUrl to imageFile
+    imageFile: null,
   });
 
   const [previewUrl, setPreviewUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,14 +27,15 @@ function AddBicycle({ onAdd, loggedInUser }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage('');
 
     const payload = new FormData();
     payload.append('name', formData.name);
     payload.append('brand', formData.brand);
     payload.append('color', formData.color);
-    payload.append('user_id', loggedInUser?.id);
+    payload.append('user_id', loggedInUser?.id.toString());
     if (formData.imageFile) {
-      payload.append('image', formData.imageFile); // key must match what backend expects
+      payload.append('image', formData.imageFile);
     }
 
     fetch('https://bicycle-backend.onrender.com/bicycles', {
@@ -46,18 +48,14 @@ function AddBicycle({ onAdd, loggedInUser }) {
       })
       .then((newBike) => {
         onAdd(newBike);
-        setFormData({
-          name: '',
-          brand: '',
-          color: '',
-          imageFile: null,
-        });
+        setFormData({ name: '', brand: '', color: '', imageFile: null });
         setPreviewUrl('');
         setSuccessMessage('✅ Bicycle added successfully!');
         setTimeout(() => setSuccessMessage(''), 3000);
       })
       .catch((error) => {
         console.error('Error:', error);
+        setErrorMessage('❌ Failed to add bicycle. Please try again.');
       });
   };
 
@@ -65,46 +63,17 @@ function AddBicycle({ onAdd, loggedInUser }) {
     <div className="add-bicycle-container">
       <h2>Add a New Bicycle</h2>
       {successMessage && <p className="success">{successMessage}</p>}
+      {errorMessage && <p className="error">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
-        <input
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-
+        <input name="name" value={formData.name} onChange={handleChange} required />
         <label>Brand:</label>
-        <input
-          name="brand"
-          value={formData.brand}
-          onChange={handleChange}
-          required
-        />
-
+        <input name="brand" value={formData.brand} onChange={handleChange} required />
         <label>Color:</label>
-        <input
-          name="color"
-          value={formData.color}
-          onChange={handleChange}
-          required
-        />
-
+        <input name="color" value={formData.color} onChange={handleChange} required />
         <label>Upload Image:</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-
-        {previewUrl && (
-          <img
-            src={previewUrl}
-            alt="Preview"
-            style={{ width: '100%', borderRadius: '8px', marginTop: '10px' }}
-          />
-        )}
-
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '10px' }} />}
         <button type="submit">Add Bicycle</button>
       </form>
     </div>

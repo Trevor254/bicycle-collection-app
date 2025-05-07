@@ -6,14 +6,23 @@ from werkzeug.utils import secure_filename
 from models import db, Bicycle, MaintenanceLog, User, Ride
 
 app = Flask(__name__)
-CORS(app)
 
-# Config
+# ✅ CORS setup for cross-origin login (with credentials)
+CORS(app, supports_credentials=True, origins=[
+    "https://bicycle-collection-app-ejd5-git-main-trevor-richards-projects.vercel.app",
+    "http://localhost:3001"
+])
+
+# ✅ Config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bicycles.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.secret_key = os.environ.get("SECRET_KEY", "dev")
+
+# ✅ Required for cross-site cookies
+app.config['SESSION_COOKIE_SAMESITE'] = "None"
+app.config['SESSION_COOKIE_SECURE'] = True
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -44,7 +53,7 @@ def add_bicycle():
         name=data.get("name"),
         brand=data.get("brand"),
         color=data.get("color"),
-        image_url=data.get("imageUrl")  # ✅ now expecting "imageUrl" from frontend
+        image_url=data.get("imageUrl")
     )
     db.session.add(new_bike)
     db.session.commit()
@@ -72,12 +81,11 @@ def add_maintenance_log():
         bicycle_id=data["bicycle_id"],
         description=data["description"],
         date=data["date"],
-        type=data["type"]  # ✅ FIXED: Was data["service_type"]
+        type=data["type"]
     )
     db.session.add(log)
     db.session.commit()
     return jsonify(log.to_dict()), 201
-
 
 @app.route("/maintenance/<int:id>", methods=["PATCH"])
 def update_maintenance_log(id):
@@ -87,7 +95,7 @@ def update_maintenance_log(id):
     log.bicycle_id = data.get("bicycle_id", log.bicycle_id)
     log.description = data.get("description", log.description)
     log.date = data.get("date", log.date)
-    log.type = data.get("type", log.type)  # ✅ Using "type" for consistency
+    log.type = data.get("type", log.type)
 
     db.session.commit()
     return jsonify(log.to_dict()), 200

@@ -4,13 +4,14 @@
   padding: 2rem;
   padding-top: 80px;
   font-family: Arial, sans-serif;
+  color: red;
 }
 
 .rides-container h2,
 .rides-container h3 {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: red;
 }
 
 .ride-form {

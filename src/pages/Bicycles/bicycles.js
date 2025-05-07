@@ -1,7 +1,12 @@
-// src/pages/Bicycles/Bicycles.js
 import React, { useState } from 'react';
 import './bicycles.css';
+import bgImage from '../../assets/vecteezy_collection-silhouette-of-people-use-bicycle_13482516.jpg';
+import bikeIcon from '../../assets/insignia.png'; // ← NEW
 import { useNavigate } from 'react-router-dom';
+
+const style = {
+  backgroundImage: `url(${bgImage})`,
+};
 
 function Bicycles({ bicycles, setBicycles }) {
   const navigate = useNavigate();
@@ -65,73 +70,78 @@ function Bicycles({ bicycles, setBicycles }) {
   };
 
   return (
-    <div className="bicycle-list">
-      <h2>Your Bicycle Collection</h2>
-      {bicycles.length === 0 ? (
-        <p>No bicycles added yet.</p>
-      ) : (
-        <div className="bicycle-grid">
-          {bicycles.map((bike, index) => (
-            <div key={bike.id} className="bicycle-card">
-              {bike.imageUrl && (
-                <img
-                  src={bike.imageUrl}
-                  alt={`${bike.name} preview`}
-                  className="bicycle-image"
-                />
-              )}
+    <div style={style}>
+      <div className="bicycle-list">
+        <h2>Your Bicycle Collection</h2>
+        {bicycles.length === 0 ? (
+          <div className="no-bicycles">
+            <img src={bikeIcon} alt="Bike icon" className="empty-icon" />
+            <p>No bicycles added yet.</p>
+          </div>
+        ) : (
+          <div className="bicycle-grid">
+            {bicycles.map((bike, index) => (
+              <div key={bike.id} className="bicycle-card">
+                {bike.imageUrl && (
+                  <img
+                    src={bike.imageUrl}
+                    alt={`${bike.name} preview`}
+                    className="bicycle-image"
+                  />
+                )}
 
-              {editingIndex === index ? (
-                <>
-                  <input
-                    type="text"
-                    name="name"
-                    value={editForm.name}
-                    onChange={handleEditChange}
-                    placeholder="Name"
-                  />
-                  <input
-                    type="text"
-                    name="brand"
-                    value={editForm.brand}
-                    onChange={handleEditChange}
-                    placeholder="Brand"
-                  />
-                  <input
-                    type="text"
-                    name="color"
-                    value={editForm.color}
-                    onChange={handleEditChange}
-                    placeholder="Color"
-                  />
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    value={editForm.imageUrl}
-                    onChange={handleEditChange}
-                    placeholder="Image URL"
-                  />
-                  <div className="bicycle-card-buttons">
-                    <button onClick={saveEdit}>Save</button>
-                    <button onClick={cancelEdit}>Cancel</button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h3>{bike.name}</h3>
-                  <p>Brand: {bike.brand}</p>
-                  <p>Color: {bike.color}</p>
-                  <div className="bicycle-card-buttons">
-                    <button onClick={() => handleEdit(index)}>Edit</button>
-                    <button onClick={() => handleDelete(bike.id)}>Delete</button>
-                    <button onClick={() => navigate('/maintenance')}>Maintenance</button>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+                {editingIndex === index ? (
+                  <>
+                    <input
+                      type="text"
+                      name="name"
+                      value={editForm.name}
+                      onChange={handleEditChange}
+                      placeholder="Name"
+                    />
+                    <input
+                      type="text"
+                      name="brand"
+                      value={editForm.brand}
+                      onChange={handleEditChange}
+                      placeholder="Brand"
+                    />
+                    <input
+                      type="text"
+                      name="color"
+                      value={editForm.color}
+                      onChange={handleEditChange}
+                      placeholder="Color"
+                    />
+                    <input
+                      type="text"
+                      name="imageUrl"
+                      value={editForm.imageUrl}
+                      onChange={handleEditChange}
+                      placeholder="Image URL"
+                    />
+                    <div className="bicycle-card-buttons">
+                      <button onClick={saveEdit}>Save</button>
+                      <button onClick={cancelEdit}>Cancel</button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3>{bike.name}</h3>
+                    <p>Brand: {bike.brand}</p>
+                    <p>Color: {bike.color}</p>
+                    <div className="bicycle-card-buttons">
+                      <button onClick={() => handleEdit(index)}>Edit</button>
+                      <button onClick={() => handleDelete(bike.id)}>Delete</button>
+                      <button onClick={() => navigate('/maintenance')}>Maintenance</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

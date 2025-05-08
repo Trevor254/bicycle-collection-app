@@ -62,7 +62,7 @@ function App() {
           path="/add-bicycle"
           element={
             <ProtectedRoute isAuthenticated={!!loggedInUser}>
-              <AddBicycle onAdd={handleAddBicycle} />
+              <AddBicycle onAdd={handleAddBicycle} loggedInUser={loggedInUser}/>
             </ProtectedRoute>
           }
         />

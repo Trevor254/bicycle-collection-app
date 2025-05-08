@@ -84,10 +84,11 @@ function Bicycles({ bicycles, setBicycles }) {
               <div key={bike.id} className="bicycle-card">
                 {bike.imageUrl && (
                   <img
-                    src={bike.imageUrl}
-                    alt={`${bike.name} preview`}
-                    className="bicycle-image"
-                  />
+                  src={`https://bicycle-backend.onrender.com${bike.imageUrl}`}
+                  alt={`${bike.name} preview`}
+                  className="bicycle-image"
+                />
+                
                 )}
 
                 {editingIndex === index ? (

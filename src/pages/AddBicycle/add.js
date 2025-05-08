@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Addbicycle.css';
 
-function AddBicycle({ onAdd, loggedInUser }) {
+function AddBicycle({ onAdd }) {
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
@@ -33,7 +33,7 @@ function AddBicycle({ onAdd, loggedInUser }) {
     payload.append('name', formData.name);
     payload.append('brand', formData.brand);
     payload.append('color', formData.color);
-    payload.append('user_id', loggedInUser?.id.toString());
+    //payload.append('user_id', loggedInUser?.id.toString());
     if (formData.imageFile) {
       payload.append('image', formData.imageFile);
     }

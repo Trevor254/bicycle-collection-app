@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './bicycles.css';
 import bgImage from '../../assets/vecteezy_collection-silhouette-of-people-use-bicycle_13482516.jpg';
-import bikeIcon from '../../assets/insignia.png'; // ← NEW
+import bikeIcon from '../../assets/insignia.png';
 import { useNavigate } from 'react-router-dom';
 
 const style = {
@@ -12,6 +12,15 @@ function Bicycles({ bicycles, setBicycles }) {
   const navigate = useNavigate();
   const [editingIndex, setEditingIndex] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', brand: '', color: '', imageUrl: '' });
+  const [modalImage, setModalImage] = useState(null);
+
+  const openModal = (url) => {
+    setModalImage(url);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
+  };
 
   const handleDelete = (id) => {
     fetch(`https://bicycle-backend.onrender.com/bicycles/${id}`, {
@@ -84,11 +93,12 @@ function Bicycles({ bicycles, setBicycles }) {
               <div key={bike.id} className="bicycle-card">
                 {bike.imageUrl && (
                   <img
-                  src={`https://bicycle-backend.onrender.com${bike.imageUrl}`}
-                  alt={`${bike.name} preview`}
-                  className="bicycle-image"
-                />
-                
+                    src={`https://bicycle-backend.onrender.com${bike.imageUrl}`}
+                    alt={`${bike.name} preview`}
+                    className="bicycle-image"
+                    onClick={() => openModal(`https://bicycle-backend.onrender.com${bike.imageUrl}`)}
+                    style={{ cursor: 'pointer' }}
+                  />
                 )}
 
                 {editingIndex === index ? (
@@ -143,6 +153,16 @@ function Bicycles({ bicycles, setBicycles }) {
           </div>
         )}
       </div>
+
+      {/* Modal for image preview */}
+      {modalImage && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <img src={modalImage} alt="Full bicycle view" className="modal-image" />
+            <button onClick={closeModal} className="modal-close">Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
